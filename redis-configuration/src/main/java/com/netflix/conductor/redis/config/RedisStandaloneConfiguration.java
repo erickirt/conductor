@@ -15,8 +15,8 @@ package com.netflix.conductor.redis.config;
 import java.time.Duration;
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +35,7 @@ import redis.clients.jedis.UnifiedJedis;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnProperty(name = "conductor.db.type", havingValue = "redis_standalone")
+@Conditional(RedisStandaloneCondition.class)
 @Component
 @Slf4j
 public class RedisStandaloneConfiguration extends RedisConfiguration {
