@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import com.netflix.conductor.redis.jedis.JedisCommands;
+import com.netflix.conductor.redis.jedis.RetryingJedisCommands;
 import com.netflix.conductor.redis.jedis.UnifiedJedisCommands;
 import com.netflix.dyno.connectionpool.Host;
 
@@ -45,8 +46,9 @@ public class RedisStandaloneConfiguration extends RedisConfiguration {
     }
 
     @Bean
-    public JedisCommands getJedisCommands(UnifiedJedis unifiedJedis) {
-        return new UnifiedJedisCommands(unifiedJedis);
+    public JedisCommands getJedisCommands(
+            UnifiedJedis unifiedJedis, RedisProperties redisProperties) {
+        return RetryingJedisCommands.wrap(new UnifiedJedisCommands(unifiedJedis), redisProperties);
     }
 
     @Override
